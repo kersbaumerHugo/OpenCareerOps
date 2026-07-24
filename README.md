@@ -20,13 +20,13 @@ The initial flow will be:
 Notion → Python → Validation → Prioritization → Markdown Report → GitHub Actions
 ```
 [Documentation](docs)
-[Product Vision]
+[Product Vision](docs/product/vision.md)
 [MVP PRD](docs/product/prd.md)
 [Roadmap](docs/product/roadmap.md)
 [Project Philosophy](docs/philosophy.md)
 [Manifesto](docs/manifesto.md)
-[Architecture]()
-[Architecture Decisions]()
+[Architecture](docs/architecture)
+[Architecture Decisions](docs/architecture/architectureDecisions.md)
 
 ## Principles
 
