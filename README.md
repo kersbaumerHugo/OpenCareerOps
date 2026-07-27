@@ -1,245 +1,37 @@
 # OpenCareerOps
 
-## Why does this project exist?
-This project exists to help professionals better position themselves and organize their careers to acheive the extraordinary.
+OpenCareerOps is an open platform for managing career development using engineering principles, automation and artificial intelligence.
 
-## What problem does it solve?
-The princple is simple, to guide and support career building and create a uniform positioning for recruitment and networking.
+Most professionals manage their careers through memory, disconnected documents, spreadsheets and isolated applications. OpenCareerOps connects goals, learning, projects, evidence, applications and personal branding into a continuously improving system.
 
-## Who can use this project?
-Any professional that feels they've spent way too long investing time, energy and money trying to create a presence and a cohesive positioning, especially in the context of early careers or career transitions.
+## Current Status
 
-## Version Roadmap
+The project is currently in its foundation stage.
 
-### v0.1 — Source of Truth
+The first milestone focuses on defining the product vision, architecture, operational model and MVP scope before technical implementation begins.
 
-#### Objetivo:
+## MVP
 
-"Sempre saber exatamente onde estou."
+The first version will maintain a reliable career state, rank open actions and generate a weekly operational report.
 
-#### Entrega:
+The initial flow will be:
 
- - Estado da transição
- - Próximos passos
- - Histórico
- - Relatório semanal
- - Priorização
+```text
+Notion → Python → Validation → Prioritization → Markdown Report → GitHub Actions
+```
+[Documentation](docs)
+[Product Vision](docs/product/vision.md)
+[MVP PRD](docs/product/prd.md)
+[Roadmap](docs/product/roadmap.md)
+[Project Philosophy](docs/philosophy.md)
+[Manifesto](docs/manifesto.md)
+[Architecture](docs/architecture)
+[Architecture Decisions](docs/architecture/architectureDecisions.md)
 
-### v0.2 — Automation Engine
+## Principles
 
-#### Objetivo:
+OpenCareerOps is guided by Career as Code, human-in-the-loop decision making, explainable recommendations and evidence-driven career development.
 
-"Parar de atualizar tudo manualmente."
+### License
 
-#### Entram:
-
- - GitHub Actions
- - Notion API
- - Python
- - Geração automática de relatório
- - Changelog automático
-
-### v0.3 — Career Intelligence
-
-#### Objetivo:
-
-"Começar a pensar."
-
-#### Entram:
-
- - análise de prioridades
- - identificação de gargalos
- - risco de atraso
- - Sugestão de próximos passos
- - Detecção de inconsistências
-
-### v0.4 — Knowledge Engine
-
-#### Entram:
-
- - RAG
- - embeddings
- - vector database
- - leitura do GitHub
- - leitura do currículo
- - leitura das publicações
-
-Agora ele passa a responder perguntas como:
-
-"Já escrevi algo parecido?"
-
-### v0.5 — ContentOps
-
-Entram:
-
- - Geração de ideias
- - Calendário editorial
- - Revisão
- - Score de qualidade
- - Sugestões de imagens
-
-### v0.6 — JobOps
-
-Entram:
-
- - vagas
- - ATS
- - comparação currículo x vaga
- - score de aderência
- - acompanhamento de candidaturas
-
-### v1.0 — OpenCareerOps
-
-Primeira versão pública.
-
-## OpenCareerOps Philosophy
-
-OpenCareerOps parte de uma ideia simples:
-
-> **Uma carreira é um sistema complexo, não uma sequência de decisões isoladas.**
-
-Projetos, estudos, certificações, currículo, candidaturas e marca pessoal costumam ser gerenciados em ferramentas desconectadas e dependem fortemente da memória. O resultado é retrabalho, perda de contexto e dificuldade para definir prioridades.
-
-O OpenCareerOps aplica princípios de engenharia de software para reduzir esse atrito.
-
-## Nossos princípios
-
-### Career as Code
-
-Sempre que possível, o estado da carreira deve ser representado de forma estruturada, versionável e auditável.
-
-Assim como infraestrutura pode ser descrita como código, objetivos, habilidades, projetos e evidências também podem.
-
----
-
-### Single Source of Truth
-
-Cada informação deve possuir uma única fonte oficial.
-
-Duplicação de informações inevitavelmente gera inconsistências.
-
----
-
-### Human in the Loop
-
-A IA recomenda.
-
-O ser humano decide.
-
-O projeto existe para ampliar a capacidade de decisão, nunca para substituí-la.
-
----
-
-### Explainability First
-
-Nenhuma recomendação importante deve ser uma caixa-preta.
-
-Toda prioridade precisa ser justificável.
-
-Toda sugestão precisa ser explicável.
-
----
-
-### Evidence over Claims
-
-Competências são demonstradas por evidências.
-
-Projetos.
-
-Commits.
-
-Documentação.
-
-Resultados.
-
-Publicações.
-
-Não apenas por descrições no currículo.
-
----
-
-### Continuous Improvement
-
-Assim como em DevOps, evolução contínua é mais importante do que grandes mudanças ocasionais.
-
-Pequenas melhorias constantes superam grandes reformulações esporádicas.
-
----
-
-### Automation with Purpose
-
-Automação não é um objetivo.
-
-É uma ferramenta.
-
-Só automatizamos processos que já funcionam manualmente.
-
----
-
-### Build in Public
-
-Sempre que possível, conhecimento deve ser compartilhado.
-
-O projeto documenta não apenas o resultado, mas também as decisões, erros, trade-offs e aprendizados ao longo do caminho.
-
----
-
-## O que o OpenCareerOps não é
-
-* Não é um piloto automático de carreira.
-* Não substitui planejamento estratégico.
-* Não toma decisões pelo usuário.
-* Não busca maximizar produtividade a qualquer custo.
-
-O objetivo é criar clareza, reduzir atrito e apoiar decisões melhores.
-
----
-
-## Nossa definição de sucesso
-
-Uma boa ferramenta não diz o que fazer.
-
-Ela fornece contexto suficiente para que a próxima decisão importante seja evidente.
-
----
-
-## TL;DR
-
-> **Systems over Hacks**
-
-Sempre que houver escolha entre uma solução rápida e uma solução sustentável, priorizamos construir sistemas simples, modulares e evolutivos. Cada decisão deve facilitar a próxima evolução, não apenas resolver o problema do momento.
-
-Na minha visão, esse princípio resume muito da sua transição. Você deixou de enxergar problemas como tarefas isoladas e passou a tratá-los como sistemas que podem ser modelados, automatizados e continuamente aprimorados. É exatamente isso que você vem aplicando em DataOps, DevOps, na organização do seu dashboard e agora no OpenCareerOps.
-
-
-## OpenCareerOps Manifesto
-
-> "A carreira é um sistema."
-
-Não um conjunto de decisões isoladas.
-
-Cada estudo gera conhecimento.
-
-Cada conhecimento gera evidência.
-
-Cada evidência fortalece o portfólio.
-
-Cada projeto fortalece a marca.
-
-Cada publicação fortalece a autoridade.
-
-Cada candidatura reutiliza tudo isso.
-
-Nosso objetivo não é automatizar pessoas.
-
-Nosso objetivo é remover atrito para que pessoas possam investir energia no que realmente importa: aprender, construir e compartilhar.
-
-Toda automação deve preservar a decisão humana.
-
-Toda recomendação deve ser transparente.
-
-Toda prioridade deve ser justificável.
-
-Todo conhecimento deve permanecer acessível.
-
-Toda evolução deve ser observável.
+Distributed under the MIT License.
