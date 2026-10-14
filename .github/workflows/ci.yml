@@ -33,17 +33,13 @@ jobs:
         run: ruff format --check .
 
   tests:
-    name: tests-py${{ matrix.python-version }}
+    name: tests
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.13']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.13'
       - name: Install project and quality tools
         run: python -m pip install -e . -r requirements-dev.txt
       - name: Unit and integration tests with branch coverage

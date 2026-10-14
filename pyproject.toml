@@ -7,7 +7,7 @@ name = "opencareerops"
 version = "0.2.0.dev0"
 description = "Explainable career reviews and action prioritization"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 license = {text = "MIT"}
 
 [project.scripts]
@@ -18,7 +18,7 @@ where = ["src"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]

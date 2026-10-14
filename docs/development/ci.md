@@ -3,7 +3,7 @@
 Every PR targeting `main`, every push to `main`, and manual runs execute the `CI` workflow:
 
 - **lint-and-format** — Ruff import/style checks and formatter check.
-- **tests-py3.11 / tests-py3.13** — complete `unittest` suite, branch coverage (minimum 80%), and CLI end-to-end test.
+- **tests** — complete `unittest` suite, branch coverage (minimum 80%), and CLI end-to-end test.
 - **package-smoke** — build and install a wheel in a clean virtual environment, run the installed CLI, then upload the wheel as an ephemeral build artifact.
 - **quality-gate** — a single stable required status that fails unless all prior jobs succeed.
 
@@ -13,7 +13,7 @@ target and its approval/rollback policy are documented.
 
 ## Local validation
 
-Python 3.11+ is required. On Debian use `python3` rather than assuming a `python` command:
+Python 3.13+ is required. On Debian use `python3` rather than assuming a `python` command:
 
 ```bash
 python3 -m venv .venv
