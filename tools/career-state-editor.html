@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>OpenCareerOps | Editor local de carreira</title>
+  <style>
+    :root {color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:#0b1220; color:#e9f1fb;}
+    * {box-sizing:border-box}
+    body {margin:0; min-height:100vh; line-height:1.45}
+    button, input, textarea, select {font:inherit}
+    button {cursor:pointer}
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {outline:2px solid #64dfd1; outline-offset:3px}
+    button:disabled {cursor:default; opacity:.55}
+    .shell {max-width:1140px; margin:auto; padding:36px 26px 90px}
+    .topline {display:flex; align-items:center; gap:12px; margin-bottom:34px}
+    .mark {display:flex; justify-content:center; align-items:center; width:40px; height:40px; border-radius:13px; color:#081c21; background:#64dfd1; font-size:21px; font-weight:900}
+    .brand {font-size:16px; font-weight:800; letter-spacing:-.3px}
+    .brand-sub {font-size:12px; color:#93a7bf}
+    .local {margin-left:auto; color:#8ee7cf; border:1px solid #316861; border-radius:18px; padding:6px 12px; font-size:12px; font-weight:650}
+    .intro {display:flex; align-items:flex-end; justify-content:space-between; gap:26px; margin-bottom:30px}
+    .eyebrow {color:#77dfcf; font-size:12px; text-transform:uppercase; letter-spacing:2px; font-weight:750}
+    h1 {font-size:clamp(30px,4.5vw,47px); letter-spacing:-1.6px; line-height:1.1; margin:8px 0 11px}
+    h2 {font-size:21px; letter-spacing:-.45px; margin:0}
+    h3 {font-size:16px; margin:0}
+    p {margin:0; color:#9fb2c8; max-width:650px}
+    .actions {display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+    .button {display:inline-flex; align-items:center; gap:8px; justify-content:center; min-height:42px; background:#1c2c42; color:#e9f4ff; border:1px solid #3c516a; padding:10px 17px; border-radius:11px; font-weight:750; font-size:13px}
+    .button:hover {background:#2a3c53}
+    .button-primary {background:#64dfd1; border-color:#64dfd1; color:#0b2429}
+    .button-primary:hover {background:#8af0e0}
+    .button-danger {background:transparent; border-color:#5a3947; color:#ffabba}
+    .button-danger:hover {background:#432835}
+    .panel {background:#121e30; border:1px solid #2a3c52; border-radius:17px; padding:24px}
+    .panel-head {display:flex; justify-content:space-between; gap:12px; margin-bottom:17px; align-items:center}
+    .panel-caption {color:#8da4bc; font-size:12px}
+    .overview {display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; margin:25px 0}
+    .metric {border:1px solid #293a50; background:#101b2b; padding:17px 18px; border-radius:14px}
+    .metric strong {display:block; font-size:28px; margin-bottom:0}
+    .metric span {color:#9fb3ca; font-size:12px}
+    .field {display:flex; flex-direction:column; gap:7px; min-width:0}
+    label, .field-label {font-size:12px; font-weight:750; color:#bdcee0}
+    input, select, textarea {width:100%; color:#e8f2ff; background:#0c1728; border:1px solid #34465e; border-radius:10px; padding:10px 12px; min-height:43px; outline:0}
+    input::placeholder, textarea::placeholder {color:#657e98}
+    textarea {resize:vertical; min-height:86px}
+    .helper {font-size:12px; color:#90a5bd; margin-top:9px}
+    .section-bar {display:flex; gap:15px; justify-content:space-between; align-items:center; margin:32px 0 14px}
+    .filters {display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+    .filters input {width:198px}
+    .filters select {width:172px}
+    .empty {border:1px dashed #455b75; background:#101a2b; text-align:center; border-radius:16px; padding:45px 24px; margin:12px 0}
+    .empty strong {display:block; margin:0 0 8px; font-size:17px}
+    .empty p {margin:auto}
+    #cards {display:flex; flex-direction:column; gap:14px}
+    .action-card {padding:22px; background:#121e30; border:1px solid #304158; border-radius:16px}
+    .card-top {display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px}
+    .badge {font-size:11px; font-weight:750; padding:5px 9px; background:#283749; border:1px solid #3f5065; color:#c1d2e5; border-radius:16px}
+    .score {font-size:12px; font-weight:750; color:#84e5d6; margin-left:auto}
+    .card-fields {display:grid; grid-template-columns:2.1fr 1fr 1fr 1fr; gap:12px; margin-bottom:14px}
+    .ratings {display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+    .details {margin-top:12px; border-top:1px solid #304057; padding-top:13px}
+    summary {cursor:pointer; font-size:12px; color:#93c7d7}
+    .details-grid {display:grid; grid-template-columns:1fr 2fr; gap:12px; margin-top:12px}
+    .bottom {display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:13px; margin-top:28px; background:#17263a; border:1px solid #345069; border-radius:16px; padding:16px 20px}
+    .status {font-size:13px; color:#acc1d7}
+    .status.error {color:#ffacb9}
+    .footer {font-size:12px; color:#7e96b0; margin-top:24px; line-height:1.6}
+    #fileInput {display:none}
+    [hidden] {display:none !important}
+    .preview-wrap {margin-top:18px}
+    pre {max-height:400px; overflow:auto; white-space:pre; background:#091423; border:1px solid #33445d; padding:17px; border-radius:12px; color:#addfd9; font:12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace}
+    @media(max-width:900px) {.intro {align-items:flex-start; flex-direction:column} .card-fields {grid-template-columns:1fr 1fr} }
+    @media(max-width:640px) {.shell{padding:21px 14px 50px}.overview{grid-template-columns:1fr 1fr}.panel{padding:18px}.card-fields,.ratings,.details-grid{grid-template-columns:1fr}.section-bar{align-items:flex-start;flex-direction:column}.filters,.filters input,.filters select {width:100%}.bottom {align-items:stretch;flex-direction:column}.bottom .actions {width:100%}.bottom .button{flex:1}.action-card{padding:16px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topline">
+      <div class="mark" aria-hidden="true">O</div>
+      <div><div class="brand">OpenCareerOps</div><div class="brand-sub">Career as Code / Editor v1</div></div>
+      <div class="local">● 100% local · offline</div>
+    </header>
+    <div class="intro">
+      <div><div class="eyebrow">Seu estado de carreira</div><h1>Planeje com clareza.<br>Versione no Git.</h1><p>Organize seu foco e as próximas ações sem editar JSON na mão. Nada é enviado para a internet.</p></div>
+      <div class="actions"><button class="button" id="importButton" type="button">↥ Abrir current.json</button><button class="button" id="previewButton" type="button">{ } Ver JSON</button></div>
+    </div>
+    <input id="fileInput" type="file" accept=".json,application/json" aria-label="Selecionar arquivo JSON existente">
+    <section class="panel" aria-labelledby="focusTitle">
+      <div class="panel-head"><h2 id="focusTitle">Objetivo atual</h2><span class="panel-caption">1 foco por vez</span></div>
+      <div class="field"><label for="focus">Qual é a sua direção profissional agora?</label><textarea id="focus" maxlength="300" placeholder="Ex.: Evoluir para SRE / Platform Engineering, priorizando projetos demonstráveis e vagas remotas"></textarea></div>
+      <p class="helper">Esse texto aparecerá no cabeçalho do relatório semanal.</p>
+    </section>
+    <section class="overview" aria-label="Resumo das ações">
+      <div class="metric"><strong id="countAll">0</strong><span>Ações cadastradas</span></div>
+      <div class="metric"><strong id="countOpen">0</strong><span>Em aberto</span></div>
+      <div class="metric"><strong id="countBlocked">0</strong><span>Bloqueadas</span></div>
+      <div class="metric"><strong id="countDone">0</strong><span>Concluídas</span></div>
+    </section>
+    <section aria-labelledby="actionsTitle">
+      <div class="section-bar"><div><h2 id="actionsTitle">Ações e prioridades</h2><p class="helper">Impacto, urgência e esforço são avaliações suas, de 1 a 5.</p></div><button class="button button-primary" id="addButton" type="button">＋ Nova ação</button></div>
+      <div class="filters" style="margin-bottom:15px"><input id="search" type="search" aria-label="Buscar ações" placeholder="Buscar ação ou categoria..."><select id="statusFilter" aria-label="Filtrar por status"><option value="all">Todos os status</option><option value="todo">A fazer</option><option value="in_progress">Em andamento</option><option value="blocked">Bloqueada</option><option value="done">Concluída</option></select></div>
+      <div class="empty" id="empty"><strong>Nenhuma ação ainda.</strong><p>Clique em “Nova ação” para começar. Cada ação será versionada no seu repositório privado.</p></div>
+      <div id="cards"></div>
+    </section>
+    <section class="bottom" aria-label="Exportar estado">
+      <div><strong>Pronto para salvar?</strong><div class="status" id="message" role="status" aria-live="polite">O JSON só é baixado quando você clicar em Exportar.</div></div>
+      <div class="actions"><button class="button" id="validateButton" type="button">✓ Validar</button><button class="button button-primary" id="exportButton" type="button">↓ Exportar current.json</button></div>
+    </section>
+    <div class="preview-wrap" id="previewWrap" hidden><h3>Prévia do JSON</h3><p class="helper">Use “Exportar” para gerar o arquivo; a prévia não altera o Git.</p><pre id="jsonPreview"></pre></div>
+    <footer class="footer">Privacidade: esta página não usa serviços, bibliotecas, analytics ou armazenamento no navegador. Exportar não faz commit nem atualiza arquivos automaticamente: mova o JSON gerado para <code>career-state/state/current.json</code> e valide antes de versionar. Não inclua senhas, tokens ou outros segredos.</footer>
+  </main>
+  <datalist id="categorySuggestions"><option value="learning"><option value="portfolio"><option value="applications"><option value="networking"><option value="evidence"><option value="planning"><option value="certifications"><option value="general"></datalist>
+  <script>
+    'use strict';
+    const STATUS = {todo:'A fazer',in_progress:'Em andamento',blocked:'Bloqueada',done:'Concluída'};
+    const FIELDS = ['id','title','category','status','impact','urgency','effort','due_date'];
+    const $ = (id) => document.getElementById(id);
+    let state = {schema_version:1, focus:'', actions:[]};
+    let changed = false;
+
+    function notice(text, error=false) {
+      $('message').textContent = text;
+      $('message').classList.toggle('error', error);
+    }
+    function markChanged() {
+      changed = true;
+      notice('Há alterações no formulário. Exporte e faça commit para registrá-las.');
+      updatePreview();
+    }
+    function assertDate(value, description) {
+      if (value === null || value === '') return;
+      if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error(description + ': data inválida.');
+      const d = new Date(value + 'T00:00:00Z');
+      if (!Number.isFinite(d.getTime()) || d.toISOString().slice(0,10) !== value) throw new Error(description + ': data inválida.');
+    }
+    function clean(raw) {
+      if (raw === null || typeof raw !== 'object' || Array.isArray(raw)) throw new Error('O estado precisa ser um objeto JSON.');
+      if (Object.keys(raw).some(key => !['schema_version','focus','actions'].includes(key))) throw new Error('JSON possui campos novos que este editor não conhece; exportação cancelada para não perder dados.');
+      if (raw.schema_version !== 1) throw new Error('Somente schema_version 1 é suportado.');
+      if (typeof raw.focus !== 'string' || !raw.focus.trim()) throw new Error('Preencha seu objetivo profissional.');
+      if (raw.focus.trim().length > 300) throw new Error('O objetivo deve ter até 300 caracteres.');
+      if (!Array.isArray(raw.actions)) throw new Error('O campo actions deve ser uma lista.');
+      const seen = new Set();
+      const actions = raw.actions.map((a, index) => {
+        const location = `Ação ${index + 1}`;
+        if (a === null || typeof a !== 'object' || Array.isArray(a)) throw new Error(location + ' não é um objeto.');
+        if (Object.keys(a).some(key => !FIELDS.includes(key))) throw new Error(location + ' contém campos desconhecidos; exportação cancelada para não perder dados.');
+        const id = typeof a.id === 'string' ? a.id.trim() : '';
+        const title = typeof a.title === 'string' ? a.title.trim() : '';
+        const category = a.category === undefined ? 'general' : (typeof a.category === 'string' ? a.category.trim() : '');
+        if (!id) throw new Error(location + ': identificador obrigatório.');
+        if (seen.has(id)) throw new Error('Identificador duplicado: ' + id);
+        seen.add(id);
+        if (!title) throw new Error(location + ': título obrigatório.');
+        if (!category) throw new Error(location + ': categoria obrigatória.');
+        if (!Object.hasOwn(STATUS, a.status)) throw new Error(location + ': status inválido.');
+        for (const field of ['impact','urgency','effort']) if (!Number.isInteger(a[field]) || a[field] < 1 || a[field] > 5) throw new Error(location + ': ' + field + ' deve ser um inteiro entre 1 e 5.');
+        const due = a.due_date === undefined || a.due_date === '' ? null : a.due_date;
+        assertDate(due, location);
+        return {id, title, category, status:a.status, impact:a.impact, urgency:a.urgency, effort:a.effort, due_date:due};
+      });
+      return {schema_version:1, focus:raw.focus.trim(), actions};
+    }
+    function draft() { return {schema_version:1, focus:$('focus').value, actions:state.actions}; }
+    function updateSummary() {
+      $('countAll').textContent = state.actions.length;
+      $('countOpen').textContent = state.actions.filter(a => a.status === 'todo' || a.status === 'in_progress').length;
+      $('countBlocked').textContent = state.actions.filter(a => a.status === 'blocked').length;
+      $('countDone').textContent = state.actions.filter(a => a.status === 'done').length;
+    }
+    function nextId() {
+      let n=1;
+      const existing = new Set(state.actions.map(a => a.id));
+      while (existing.has('action-' + n)) n++;
+      return 'action-' + n;
+    }
+    function scoreInfo(a) {
+      if (a.status === 'done' || a.status === 'blocked') return 'Não entra no ranking';
+      if (['impact','urgency','effort'].some(f => !Number.isInteger(a[f]) || a[f] < 1 || a[f] > 5)) return 'Avalie impacto, urgência e esforço';
+      let score = a.impact * 3 + a.urgency * 2 - a.effort;
+      if (a.due_date) {
+        const today = new Date();
+        const day = Date.UTC(today.getFullYear(),today.getMonth(),today.getDate());
+        const remaining = (Date.parse(a.due_date + 'T00:00:00Z') - day)/86400000;
+        if (remaining < 0) score += 4;
+        else if (remaining <= 7) score += 2;
+      }
+      if (a.status === 'in_progress') score += 1;
+      return `Score previsto: ${score}`;
+    }
+    function applyFilters() {
+      const text = $('search').value.trim().toLowerCase();
+      const filter = $('statusFilter').value;
+      let visible=0;
+      for (const [index, card] of Array.from($('cards').children).entries()) {
+        const a=state.actions[index];
+        const show=(!text || [a.id,a.title,a.category].some(s => String(s).toLowerCase().includes(text))) && (filter==='all'||a.status===filter);
+        card.hidden=!show;
+        if(show) visible++;
+      }
+      $('empty').hidden=visible>0;
+      $('empty').querySelector('strong').textContent=state.actions.length ? 'Nenhuma ação corresponde ao filtro.' : 'Nenhuma ação ainda.';
+    }
+    function updatePreview() {
+      if ($('previewWrap').hidden) return;
+      $('jsonPreview').textContent=JSON.stringify(draft(),null,2);
+    }
+    function render() {
+      $('focus').value=state.focus;
+      $('cards').replaceChildren();
+      state.actions.forEach((a) => {
+        const card=document.createElement('article');
+        card.className='action-card';
+        card.innerHTML=`
+          <div class="card-top"><span class="badge" data-role="statusBadge"></span><span class="score" data-role="score"></span><button class="button button-danger" type="button" data-role="remove" aria-label="Excluir ação">Excluir</button></div>
+          <div class="card-fields">
+            <div class="field"><label>Título da ação<input data-field="title" maxlength="240" placeholder="Ex.: Atualizar currículo em inglês" required></label></div>
+            <div class="field"><label>Categoria<input data-field="category" list="categorySuggestions" maxlength="80" placeholder="Ex.: portfolio"></label></div>
+            <div class="field"><label>Status<select data-field="status"><option value="todo">A fazer</option><option value="in_progress">Em andamento</option><option value="blocked">Bloqueada</option><option value="done">Concluída</option></select></label></div>
+            <div class="field"><label>Prazo (opcional)<input data-field="due_date" type="date"></label></div>
+          </div>
+          <div class="ratings">
+            <div class="field"><label>Impacto (1–5)<select data-field="impact" required><option value="">Selecione</option><option value="1">1 — Baixo</option><option value="2">2</option><option value="3">3 — Médio</option><option value="4">4</option><option value="5">5 — Alto</option></select></label></div>
+            <div class="field"><label>Urgência (1–5)<select data-field="urgency" required><option value="">Selecione</option><option value="1">1 — Baixa</option><option value="2">2</option><option value="3">3 — Média</option><option value="4">4</option><option value="5">5 — Alta</option></select></label></div>
+            <div class="field"><label>Esforço (1–5)<select data-field="effort" required><option value="">Selecione</option><option value="1">1 — Pequeno</option><option value="2">2</option><option value="3">3 — Médio</option><option value="4">4</option><option value="5">5 — Grande</option></select></label></div>
+          </div>
+          <details class="details"><summary>Identificador estável (avançado)</summary><div class="details-grid"><div class="field"><label>ID único<input data-field="id" required maxlength="100"></label></div><p class="helper">Não altere o ID quando renomear uma ação: ele identifica a mesma tarefa no histórico do Git.</p></div></details>`;
+        card.querySelectorAll('[data-field]').forEach(input => {
+          const key=input.dataset.field;
+          input.value=a[key] == null ? '' : String(a[key]);
+          const onEdit=() => {
+            a[key]=['impact','urgency','effort'].includes(key) ? (input.value==='' ? null : Number(input.value)) : (key==='due_date' ? (input.value||null) : input.value);
+            updateCard(); updateSummary(); applyFilters(); markChanged();
+          };
+          input.addEventListener(key==='status'||input.tagName==='SELECT'||key==='due_date' ? 'change':'input',onEdit);
+        });
+        const updateCard=() => {
+          card.querySelector('[data-role="statusBadge"]').textContent=STATUS[a.status]||'Status inválido';
+          card.querySelector('[data-role="score"]').textContent=scoreInfo(a);
+        };
+        card.querySelector('[data-role="remove"]').addEventListener('click',() => {
+          if(!confirm('Excluir esta ação do arquivo exportado?'))return;
+          state.actions.splice(state.actions.indexOf(a),1);
+          render();markChanged();
+        });
+        updateCard();$('cards').append(card);
+      });
+      updateSummary();applyFilters();updatePreview();
+    }
+    $('focus').addEventListener('input',() => { state.focus=$('focus').value;markChanged(); });
+    $('search').addEventListener('input',applyFilters);
+    $('statusFilter').addEventListener('change',applyFilters);
+    $('addButton').addEventListener('click',() => {
+      state.actions.push({id:nextId(),title:'',category:'general',status:'todo',impact:null,urgency:null,effort:null,due_date:null});
+      $('search').value='';$('statusFilter').value='all'; render();markChanged();
+      $('cards').lastElementChild.querySelector('[data-field="title"]').focus();
+    });
+    $('validateButton').addEventListener('click',() => {
+      try {clean(draft());notice('✓ Tudo certo: o estado atende ao contrato JSON v1.');}
+      catch(error){notice('✕ '+error.message,true);}
+    });
+    $('exportButton').addEventListener('click',() => {
+      try {
+        const value=clean(draft());
+        const blob=new Blob([JSON.stringify(value,null,2)+'\n'],{type:'application/json;charset=utf-8'});
+        const url=URL.createObjectURL(blob);
+        const anchor=document.createElement('a');anchor.href=url;anchor.download='current.json';
+        document.body.append(anchor);anchor.click();anchor.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),3000);
+        changed=false;
+        notice('✓ JSON exportado. Copie current.json para career-state/state/current.json e faça commit.');
+      }catch(error){notice('✕ '+error.message,true);}
+    });
+    $('previewButton').addEventListener('click',() => {
+      $('previewWrap').hidden=!$('previewWrap').hidden;
+      $('previewButton').textContent=$('previewWrap').hidden?'{ } Ver JSON':'{ } Ocultar JSON';
+      updatePreview();
+    });
+    $('importButton').addEventListener('click',() => $('fileInput').click());
+    $('fileInput').addEventListener('change',async(e) => {
+      const file=e.target.files[0];e.target.value='';if(!file)return;
+      if (changed && !confirm('Descartar alterações não exportadas e carregar este arquivo?'))return;
+      try {
+        if(file.size>1024*1024)throw new Error('Arquivo excede o limite de 1 MB.');
+        const value=clean(JSON.parse(await file.text()));
+        state=value;changed=false;$('search').value='';$('statusFilter').value='all';render();
+        notice('✓ JSON importado: '+state.actions.length+' ações. Você pode editar e exportar novamente.');
+      }catch(error){notice('✕ Não foi possível importar: '+error.message,true);}
+    });
+    window.addEventListener('beforeunload',(event)=>{if(changed){event.preventDefault();event.returnValue='';}});
+    render();
+  </script>
+</body>
+</html>

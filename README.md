@@ -15,6 +15,20 @@ Public OpenCareerOps engine  → tests/CI     ↗
 
 For the private repository bootstrap, review rules and scheduled workflow, follow the [GitOps guide](docs/development/gitops.md). Do not automatically import older Notion records without reviewing their current accuracy.
 
+### Visual editor (offline)
+
+Open [`tools/career-state-editor.html`](tools/career-state-editor.html) directly in a browser.
+It needs no server, login, JavaScript dependencies, or network connection.
+
+1. Click **Abrir current.json** to import the existing `career-state/state/current.json`, or start a new state.
+2. Edit the career focus and actions (title, category, status, 1–5 ratings and optional due date).
+3. Click **Validar**, then **Exportar current.json**.
+4. Copy the downloaded file to `career-state/state/current.json` in the **private** repo, run the engine for validation, and commit there.
+
+The HTML itself can live in the public engine repository, but **never commit real career data here**. The
+editor is intentionally stateless: it does not contact GitHub, write to disk automatically, or remember
+private career data in browser storage. Unsupported schema versions/fields are rejected rather than silently lost.
+
 ### Run the working slice
 
 Requires Python 3.13+; no runtime dependencies.
