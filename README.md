@@ -1,37 +1,57 @@
 # OpenCareerOps
 
-OpenCareerOps is an open platform for managing career development using engineering principles, automation and artificial intelligence.
+OpenCareerOps is an open platform for managing career development with engineering principles, automation and explainable recommendations. It connects goals, learning, projects, evidence, applications and personal branding into an improving career system.
 
-Most professionals manage their careers through memory, disconnected documents, spreadsheets and isolated applications. OpenCareerOps connects goals, learning, projects, evidence, applications and personal branding into a continuously improving system.
+## Status: v0.1 vertical slice
 
-## Current Status
+The first working slice validates a **fictional JSON snapshot**, deterministically ranks actionable tasks, and renders a weekly Markdown report. It needs no account, model, API key or database, so it can run in CI and on a developer machine.
 
-The project is currently in its foundation stage.
-
-The first milestone focuses on defining the product vision, architecture, operational model and MVP scope before technical implementation begins.
-
-## MVP
-
-The first version will maintain a reliable career state, rank open actions and generate a weekly operational report.
-
-The initial flow will be:
+**The intended operational source of truth remains Notion** (ADR-0001). A Notion-to-domain adapter is the next integration step; the example file is a test fixture, not a competing source of truth.
 
 ```text
-Notion → Python → Validation → Prioritization → Markdown Report → GitHub Actions
+v0.1 now:  JSON fixture → validation → explained priorities → Markdown report
+next:      Notion API    → same domain contract  → same report generator
 ```
-[Documentation](docs)
-[Product Vision](docs/product/vision.md)
-[MVP PRD](docs/product/prd.md)
-[Roadmap](docs/product/roadmap.md)
-[Project Philosophy](docs/philosophy.md)
-[Manifesto](docs/manifesto.md)
-[Architecture](docs/architecture)
-[Architecture Decisions](docs/architecture/architectureDecisions.md)
+
+### Run the working slice
+
+Requires Python 3.11+; no runtime dependencies.
+
+```bash
+PYTHONPATH=src python -m opencareerops \
+  --input examples/fictional_career_state.json \
+  --output output/weekly_report.md \
+  --today 2026-10-14
+cat output/weekly_report.md
+```
+
+Omit `--today` to use the machine's current date, or `--output` to use `output/weekly_report.md`. To install as a CLI, use `python -m pip install -e .` and then run `opencareerops --help`.
+
+### Test
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests -v
+```
+
+### JSON input contract
+
+`schema_version` must be `1`, `focus` a non-empty string, and `actions` an array. Each action has a unique `id`, `title`, `status` (`todo`, `in_progress`, `blocked`, `done`), integer `impact`, `urgency`, `effort` ratings from 1 to 5, and optional `category` and `due_date` (`YYYY-MM-DD` or `null`). Invalid input fails before a report is written.
+
+Only `todo` and `in_progress` actions are ranked. The formula is `3 × impact + 2 × urgency − effort`, with `+4` if overdue, `+2` if due within seven days (inclusive), and `+1` if in progress. Ties break by earliest due date and then action ID. Every score has an explanation; the report is **advisory**, never an automated decision. "Completed" shows completed actions in the current snapshot, not a historical weekly delta (history comes with the Notion adapter).
+
+Never commit real career records or Notion tokens. Put private snapshots under `private/` (gitignored), keep generated reports in `output/` (gitignored), and use fictional fixtures in the public repo.
+
+## Product documentation
+
+- [Product vision](docs/product/vision.md)
+- [MVP PRD](docs/product/prd.md)
+- [Roadmap](docs/product/roadmap.md)
+- [Philosophy](docs/philosophy.md)
+- [Manifesto](docs/manifesto.md)
+- [Architecture decision: Notion source of truth](adr/ADR-001.md)
 
 ## Principles
 
-OpenCareerOps is guided by Career as Code, human-in-the-loop decision making, explainable recommendations and evidence-driven career development.
+Career as Code, human-in-the-loop decisions, single source of truth, explainability, evidence over claims, and build in public.
 
-### License
-
-Distributed under the MIT License.
+MIT licensed.
