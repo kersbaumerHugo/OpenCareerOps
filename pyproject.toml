@@ -15,3 +15,18 @@ opencareerops = "opencareerops.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.coverage.run]
+branch = true
+source = ["opencareerops"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80

@@ -8,7 +8,14 @@ def valid_payload():
         "schema_version": 1,
         "focus": "Explore infrastructure engineering",
         "actions": [
-            {"id": "a", "title": "Build demo", "status": "todo", "impact": 5, "urgency": 3, "effort": 2}
+            {
+                "id": "a",
+                "title": "Build demo",
+                "status": "todo",
+                "impact": 5,
+                "urgency": 3,
+                "effort": 2,
+            }
         ],
     }
 

@@ -55,3 +55,10 @@ Never commit real career records or Notion tokens. Put private snapshots under `
 Career as Code, human-in-the-loop decisions, single source of truth, explainability, evidence over claims, and build in public.
 
 MIT licensed.
+
+### Continuous integration
+
+The [CI workflow](.github/workflows/ci.yml) checks lint/formatting, Python 3.11/3.13 tests
+and coverage, plus a built-wheel smoke test on each PR and push to `main`.
+See [CI and branch protection setup](docs/development/ci.md) for local commands and the
+required manual GitHub repository ruleset. There is no production deployment yet.

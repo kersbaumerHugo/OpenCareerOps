@@ -9,3 +9,6 @@ private/
 *.egg-info/
 dist/
 build/
+.coverage
+.coverage.*
+htmlcov/
