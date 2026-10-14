@@ -17,7 +17,7 @@ For the private repository bootstrap, review rules and scheduled workflow, follo
 
 ### Run the working slice
 
-Requires Python 3.11+; no runtime dependencies.
+Requires Python 3.13+; no runtime dependencies.
 
 ```bash
 PYTHONPATH=src python -m opencareerops \
@@ -62,7 +62,7 @@ MIT licensed.
 
 ### Continuous integration
 
-The [CI workflow](.github/workflows/ci.yml) checks lint/formatting, Python 3.11/3.13 tests
+The [CI workflow](.github/workflows/ci.yml) checks lint/formatting, Python 3.13 tests
 and coverage, plus a built-wheel smoke test on each PR and push to `main`.
 See [CI and branch protection setup](docs/development/ci.md) for local commands and the
 required manual GitHub repository ruleset. There is no production deployment yet.
