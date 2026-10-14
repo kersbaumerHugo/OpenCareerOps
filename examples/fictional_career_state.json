@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "focus": "Fictional example: transition into platform engineering",
+  "actions": [
+    {
+      "id": "portfolio-ci",
+      "title": "Publish a small project with tested CI",
+      "category": "portfolio",
+      "status": "in_progress",
+      "impact": 5,
+      "urgency": 4,
+      "effort": 2,
+      "due_date": "2026-10-16"
+    },
+    {
+      "id": "study-iac",
+      "title": "Complete an infrastructure-as-code lab",
+      "category": "learning",
+      "status": "todo",
+      "impact": 4,
+      "urgency": 3,
+      "effort": 3,
+      "due_date": "2026-10-22"
+    },
+    {
+      "id": "networking",
+      "title": "Follow up on a mentoring conversation",
+      "category": "networking",
+      "status": "todo",
+      "impact": 3,
+      "urgency": 5,
+      "effort": 1,
+      "due_date": "2026-10-13"
+    },
+    {
+      "id": "resume-proof",
+      "title": "Add measurable outcomes to portfolio evidence",
+      "category": "evidence",
+      "status": "blocked",
+      "impact": 4,
+      "urgency": 4,
+      "effort": 2,
+      "due_date": null
+    },
+    {
+      "id": "career-goal",
+      "title": "Define the next quarterly career goal",
+      "category": "planning",
+      "status": "done",
+      "impact": 4,
+      "urgency": 2,
+      "effort": 1,
+      "due_date": null
+    }
+  ]
+}
