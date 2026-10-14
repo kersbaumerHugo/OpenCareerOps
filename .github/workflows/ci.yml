@@ -76,7 +76,7 @@ jobs:
             --output "$RUNNER_TEMP/installed_report.md" \
             --today 2026-10-14
           grep -q '## Top priorities' "$RUNNER_TEMP/installed_report.md"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: opencareerops-wheel
           path: dist/*.whl
