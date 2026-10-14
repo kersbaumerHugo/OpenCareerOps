@@ -14,19 +14,20 @@
  - Relatório semanal
  - Priorização
 
-## v0.2 — Automation Engine
+## v0.2 — GitOps Career State
 
 ### Objetivo:
 
-"Parar de atualizar tudo manualmente."
+"Manter o estado da carreira versionado em Git e validado antes de cada alteração."
 
-### Entram:
+### Entrega:
 
- - GitHub Actions
- - Notion API
- - Python
- - Geração automática de relatório
- - Changelog automático
+ - ADR-0002: Git como fonte de verdade operacional
+ - `career-state` privado com `state/current.json` (schema v1)
+ - Validação automática por PR, usando o engine existente
+ - Relatório semanal gerado por GitHub Actions, disponível como artifact privado
+ - Histórico de alterações obtido por commits/PRs (sem duplicação de logs)
+ - Notion e banco de dados fora do fluxo operacional
 
 ## v0.3 — Career Intelligence
 
