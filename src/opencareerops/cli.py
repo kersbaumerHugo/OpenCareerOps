@@ -14,7 +14,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Generate an explainable weekly career review")
     parser.add_argument("--input", type=Path, required=True, help="career state JSON snapshot")
     parser.add_argument("--output", type=Path, default=Path("output/weekly_report.md"))
-    parser.add_argument("--today", default=date.today().isoformat(), help="reference date (YYYY-MM-DD)")
+    parser.add_argument(
+        "--today", default=date.today().isoformat(), help="reference date (YYYY-MM-DD)"
+    )
     parser.add_argument("--limit", type=int, default=5, help="maximum number of top priorities")
     args = parser.parse_args(argv)
 

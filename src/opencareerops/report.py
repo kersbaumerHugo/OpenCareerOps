@@ -3,7 +3,7 @@
 import html
 from datetime import date, timedelta
 
-from opencareerops.domain import CareerState, STATUSES
+from opencareerops.domain import STATUSES, CareerState
 from opencareerops.priorities import rank_actions
 
 
@@ -66,6 +66,12 @@ def render_weekly_report(state: CareerState, today: date, limit: int = 5) -> str
         lines.extend(f"- {_md(a.title)} (ID: {_md(a.id)})" for a in done)
 
     lines.extend(
-        ["", "---", "", "*Recommendations are deterministic suggestions; final decisions require human review.*", ""]
+        [
+            "",
+            "---",
+            "",
+            "*Recommendations are deterministic suggestions; final decisions require human review.*",
+            "",
+        ]
     )
     return "\n".join(lines)
