@@ -6,6 +6,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from opencareerops.curation import render_curated_proposal
 from opencareerops.domain import ValidationError, parse_date, parse_state
 from opencareerops.job_review import render_job_review
 from opencareerops.knowledge import inspect_git_project, render_knowledge_proposal
@@ -62,6 +63,9 @@ def _knowledge_propose_main(argv: list[str]) -> int:
     parser.add_argument(
         "--vault", type=Path, help="optional vault path to enforce read-only output"
     )
+    parser.add_argument(
+        "--curated", action="store_true", help="synthesize a short, reviewable evidence note"
+    )
     args = parser.parse_args(argv)
     try:
         # Resolve output paths before executing any writes.
@@ -71,7 +75,12 @@ def _knowledge_propose_main(argv: list[str]) -> int:
                 raise ValidationError("proposal output must be outside the source repository")
             if args.vault is not None and target.is_relative_to(args.vault.resolve()):
                 raise ValidationError("proposal output must be outside the read-only vault")
-        draft = render_knowledge_proposal(inspect_git_project(args.repo))
+        proposal = inspect_git_project(args.repo)
+        draft = (
+            render_curated_proposal(proposal)
+            if args.curated
+            else render_knowledge_proposal(proposal)
+        )
         if args.output is None:
             print(draft)
         else:
