@@ -8,6 +8,7 @@ from pathlib import Path
 
 from opencareerops.domain import ValidationError, parse_date, parse_state
 from opencareerops.job_review import render_job_review
+from opencareerops.knowledge import inspect_git_project, render_knowledge_proposal
 from opencareerops.report import render_weekly_report
 from opencareerops.vault import read_vault, render_vault_job_review
 
@@ -50,10 +51,45 @@ def _job_review_main(argv: list[str]) -> int:
     return 0
 
 
+def _knowledge_propose_main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(
+        description="Propose a traceable Obsidian project note from Git"
+    )
+    parser.add_argument("--repo", type=Path, required=True, help="local clone of a Git repository")
+    parser.add_argument(
+        "--output", type=Path, help="optional path outside the repository and vault"
+    )
+    parser.add_argument(
+        "--vault", type=Path, help="optional vault path to enforce read-only output"
+    )
+    args = parser.parse_args(argv)
+    try:
+        # Resolve output paths before executing any writes.
+        if args.output is not None:
+            target = args.output.resolve()
+            if target.is_relative_to(args.repo.resolve()):
+                raise ValidationError("proposal output must be outside the source repository")
+            if args.vault is not None and target.is_relative_to(args.vault.resolve()):
+                raise ValidationError("proposal output must be outside the read-only vault")
+        draft = render_knowledge_proposal(inspect_git_project(args.repo))
+        if args.output is None:
+            print(draft)
+        else:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(draft, encoding="utf-8")
+            print(f"Unapproved proposal written to {args.output}")
+    except (OSError, ValueError, UnicodeError, TimeoutError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 2
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv and argv[0] == "job-review":
         return _job_review_main(argv[1:])
+    if argv and argv[0] == "knowledge-propose":
+        return _knowledge_propose_main(argv[1:])
 
     parser = argparse.ArgumentParser(description="Generate an explainable weekly career review")
     parser.add_argument("--input", type=Path, required=True, help="career state JSON snapshot")

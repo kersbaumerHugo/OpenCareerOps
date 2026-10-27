@@ -58,6 +58,10 @@ jobs:
             --vault examples/fictional_vault \
             --output "${{ runner.temp }}/vault_report.md"
           grep -q 'Projects/demo.md:L10' "${{ runner.temp }}/vault_report.md"
+          python -m opencareerops knowledge-propose \
+            --repo "$GITHUB_WORKSPACE" \
+            --output "${{ runner.temp }}/knowledge_proposal.md"
+          grep -q 'career_evidence: false' "${{ runner.temp }}/knowledge_proposal.md"
 
   package:
     name: package-smoke
@@ -86,6 +90,10 @@ jobs:
             --vault "$GITHUB_WORKSPACE/examples/fictional_vault" \
             --output "$RUNNER_TEMP/installed_vault_report.md"
           grep -q 'Projects/demo.md:L10' "$RUNNER_TEMP/installed_vault_report.md"
+          ./smoke-venv/bin/opencareerops knowledge-propose \
+            --repo "$GITHUB_WORKSPACE" \
+            --output "$RUNNER_TEMP/installed_knowledge_proposal.md"
+          grep -q 'career_evidence: false' "$RUNNER_TEMP/installed_knowledge_proposal.md"
       - uses: actions/upload-artifact@v4
         with:
           name: opencareerops-wheel
