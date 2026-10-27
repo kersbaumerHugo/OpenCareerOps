@@ -81,3 +81,19 @@ The [CI workflow](.github/workflows/ci.yml) checks lint/formatting, Python 3.13 
 and coverage, plus a built-wheel smoke test on each PR and push to `main`.
 See [CI and branch protection setup](docs/development/ci.md) for local commands and the
 required manual GitHub repository ruleset. There is no production deployment yet.
+
+### Knowledge Bootstrap (Git → proposed Obsidian note)
+
+The new `knowledge-propose` command reads a **local committed Git snapshot** and
+generates a source-linked Markdown proposal. This does not edit the vault or create tasks.
+
+```bash
+python -m opencareerops knowledge-propose \
+  --repo ~/projects/agent-platform-cloud-lab \
+  --vault ~/projects/personal-vault \
+  --output output/agent-platform-cloud-lab.proposed.md
+```
+
+The draft starts with `career_evidence: false`: it is **not** approved evidence.
+See [the bootstrap guide](docs/development/knowledge-bootstrap.md) and
+[ADR-0004](adr/ADR-004.md) for validation, source limits and promotion steps.
