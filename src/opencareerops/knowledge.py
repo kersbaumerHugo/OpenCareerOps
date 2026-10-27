@@ -310,7 +310,7 @@ def inspect_git_project(root: Path) -> KnowledgeProposal:
         _github_remote(root),
         scanned,
         tuple(picked),
-        tuple(all_outcomes[:MAX_OUTCOMES]),
+        tuple(all_outcomes[:64]),
     )
 
 
@@ -364,7 +364,7 @@ def render_knowledge_proposal(proposal: KnowledgeProposal) -> str:
                 "",
             ]
         )
-        for item in proposal.observations:
+        for item in proposal.observations[:MAX_OUTCOMES]:
             locator = f"{item.path}:L{item.line}"
             if proposal.repository_url:
                 path = quote(item.path, safe="/")
