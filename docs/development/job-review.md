@@ -25,3 +25,8 @@ The command neither calls external services nor modifies the career-state reposi
 ## Next vertical slice
 
 Add an optional *approved evidence store* and resume adaptation draft that strictly cites verified accomplishments. No autonomous applications or career-task generation.
+
+## Obsidian Vault input
+
+Instead of manually maintaining profile data, pass `--vault path/to/private-vault`.
+See [Vault Reader v0](vault-reader.md) for examples, evidence filters, privacy, and limitations.

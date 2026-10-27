@@ -53,6 +53,11 @@ jobs:
             --output "${{ runner.temp }}/career_report.md" \
             --today 2026-10-14
           grep -q '## Top priorities' "${{ runner.temp }}/career_report.md"
+          python -m opencareerops job-review \
+            --job examples/fictional_job.txt \
+            --vault examples/fictional_vault \
+            --output "${{ runner.temp }}/vault_report.md"
+          grep -q 'Projects/demo.md:L10' "${{ runner.temp }}/vault_report.md"
 
   package:
     name: package-smoke
@@ -69,13 +74,18 @@ jobs:
         shell: bash
         run: |
           python -m venv "${{ runner.temp }}/smoke-venv"
-          "${{ runner.temp }}/smoke-venv/bin/python" -m pip install --no-deps dist/opencareerops-*.whl
+          "${{ runner.temp }}/smoke-venv/bin/python" -m pip install dist/opencareerops-*.whl
           cd "${{ runner.temp }}"
           ./smoke-venv/bin/opencareerops \
             --input "$GITHUB_WORKSPACE/examples/fictional_career_state.json" \
             --output "$RUNNER_TEMP/installed_report.md" \
             --today 2026-10-14
           grep -q '## Top priorities' "$RUNNER_TEMP/installed_report.md"
+          ./smoke-venv/bin/opencareerops job-review \
+            --job "$GITHUB_WORKSPACE/examples/fictional_job.txt" \
+            --vault "$GITHUB_WORKSPACE/examples/fictional_vault" \
+            --output "$RUNNER_TEMP/installed_vault_report.md"
+          grep -q 'Projects/demo.md:L10' "$RUNNER_TEMP/installed_vault_report.md"
       - uses: actions/upload-artifact@v4
         with:
           name: opencareerops-wheel

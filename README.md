@@ -2,22 +2,22 @@
 
 OpenCareerOps is an open platform for managing career development with engineering principles, automation and explainable recommendations. It connects goals, learning, projects, evidence, applications and personal branding into an improving career system.
 
-## Status: v0.2 — GitOps career state
+## Status: v0.2 + Vault Reader pilot (ADR-0003)
 
 The Python engine validates structured JSON, ranks actionable tasks deterministically and generates an explainable Markdown report. It needs no LLM or database.
 
-Under [ADR-0002](adr/ADR-002.md), Git is the operational source of truth. **Real career state belongs in a separate, private `career-state` repository**; this public repository contains the engine and fictional fixtures only. Notion is not part of the operational pipeline.
+Git remains the source of truth ([ADR-0002](adr/ADR-002.md)). For the new **Vault Reader pilot** ([ADR-0003](adr/ADR-003.md)), a separate **private Obsidian Markdown vault** is the natural human-authored knowledge source. The JSON career-state workflow is still supported, but is **not required** for Job Review. This public engine repository contains only code and fictional fixtures. Notion is not an operational dependency.
 
 ```text
 Private Git state/current.json → validation → priorities → private report artifact
 Public OpenCareerOps engine  → tests/CI     ↗
 ```
 
-For the private repository bootstrap, review rules and scheduled workflow, follow the [GitOps guide](docs/development/gitops.md). Do not automatically import older Notion records without reviewing their current accuracy.
+For legacy JSON state, see the [GitOps guide](docs/development/gitops.md). For Markdown evidence sources, see [Vault Reader](docs/development/vault-reader.md). Never commit actual personal notes to this public repository.
 
 ### Run the working slice
 
-Requires Python 3.13+; no runtime dependencies.
+Requires Python 3.13+ and the `PyYAML` runtime dependency (`pip install -e .`).
 
 ```bash
 PYTHONPATH=src python -m opencareerops \
@@ -28,6 +28,19 @@ cat output/weekly_report.md
 ```
 
 Omit `--today` to use the machine's current date, or `--output` to use `output/weekly_report.md`. To install as a CLI, use `python -m pip install -e .` and then run `opencareerops --help`.
+
+### Job Review with private Obsidian notes (no JSON task entry)
+
+```bash
+python -m opencareerops job-review \
+  --job examples/fictional_job.txt \
+  --vault examples/fictional_vault \
+  --output output/vault_job_review.md
+```
+
+The vault is read-only: just Markdown body mentions from allowed folders, with filename
+and original line citations. It does **not** verify experience or write to Git.
+Optional `--profile` still works alone or together with `--vault`.
 
 ### Test
 
@@ -51,6 +64,8 @@ Never commit real career records or tokens here. Store real operational records 
 - [Philosophy](docs/philosophy.md)
 - [Manifesto](docs/manifesto.md)
 - [ADR-0002: Git source of truth](adr/ADR-002.md)
+- [ADR-0003: Markdown vault pilot](adr/ADR-003.md)
+- [Vault Reader documentation](docs/development/vault-reader.md)
 - [GitOps setup and privacy guide](docs/development/gitops.md)
 - [Superseded ADR-0001: Notion](adr/ADR-001.md)
 

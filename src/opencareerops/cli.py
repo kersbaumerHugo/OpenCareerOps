@@ -9,20 +9,38 @@ from pathlib import Path
 from opencareerops.domain import ValidationError, parse_date, parse_state
 from opencareerops.job_review import render_job_review
 from opencareerops.report import render_weekly_report
+from opencareerops.vault import read_vault, render_vault_job_review
 
 
 def _job_review_main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description="Compare vacancy requirements to profile text")
     parser.add_argument("--job", type=Path, required=True, help="vacancy description (.txt or .md)")
+    parser.add_argument("--profile", type=Path, help="optional existing CV/profile (.txt or .md)")
     parser.add_argument(
-        "--profile", type=Path, required=True, help="existing CV/profile (.txt or .md)"
+        "--vault", type=Path, help="local Obsidian vault (read-only; career folders only)"
     )
     parser.add_argument("--output", type=Path, default=Path("output/job_review.md"))
     args = parser.parse_args(argv)
     try:
         job = args.job.read_text(encoding="utf-8")
-        profile = args.profile.read_text(encoding="utf-8")
-        report = render_job_review(job, profile, args.job.name, args.profile.name)
+        if args.profile is None and args.vault is None:
+            raise ValidationError("supply --profile and/or --vault")
+        profile = args.profile.read_text(encoding="utf-8") if args.profile else None
+        if args.vault is not None:
+            if args.output.resolve().is_relative_to(args.vault.resolve()):
+                raise ValidationError("output must be outside the read-only vault")
+            notes = read_vault(args.vault)
+            report = render_vault_job_review(
+                job,
+                notes,
+                args.job.name,
+                profile=profile,
+                profile_name=args.profile.name if args.profile else None,
+            )
+        else:
+            assert profile is not None  # validated above
+            assert args.profile is not None
+            report = render_job_review(job, profile, args.job.name, args.profile.name)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(report, encoding="utf-8")
     except (OSError, ValueError) as error:
