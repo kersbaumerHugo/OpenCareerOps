@@ -1,0 +1,6 @@
+Fictional Vacancy — Platform Engineer
+Requirements
+- Professional experience with Python and Docker
+- Knowledge of Kubernetes and AWS
+- Familiarity with Terraform
+- Clear communication with colleagues
