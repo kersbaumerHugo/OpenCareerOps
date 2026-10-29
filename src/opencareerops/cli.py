@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import sys
 from datetime import date
 from pathlib import Path
@@ -10,6 +11,7 @@ from opencareerops.curation import render_curated_proposal
 from opencareerops.domain import ValidationError, parse_date, parse_state
 from opencareerops.job_review import render_job_review
 from opencareerops.knowledge import inspect_git_project, render_knowledge_proposal
+from opencareerops.llm_writer import generate_llm_proposal
 from opencareerops.report import render_weekly_report
 from opencareerops.vault import read_vault, render_vault_job_review
 
@@ -66,6 +68,23 @@ def _knowledge_propose_main(argv: list[str]) -> int:
     parser.add_argument(
         "--curated", action="store_true", help="synthesize a short, reviewable evidence note"
     )
+    parser.add_argument(
+        "--writer",
+        choices=("deterministic", "llm"),
+        default="deterministic",
+        help="optional LLM drafting; deterministic behavior is the default",
+    )
+    parser.add_argument(
+        "--llm-base-url", help="OpenAI-compatible API base URL (or OPENCAREEROPS_LLM_BASE_URL)"
+    )
+    parser.add_argument(
+        "--llm-model", help="provider model identifier (or OPENCAREEROPS_LLM_MODEL)"
+    )
+    parser.add_argument(
+        "--allow-remote-llm",
+        action="store_true",
+        help="explicitly authorize sending selected evidence to a remote HTTPS provider",
+    )
     args = parser.parse_args(argv)
     try:
         # Resolve output paths before executing any writes.
@@ -75,12 +94,29 @@ def _knowledge_propose_main(argv: list[str]) -> int:
                 raise ValidationError("proposal output must be outside the source repository")
             if args.vault is not None and target.is_relative_to(args.vault.resolve()):
                 raise ValidationError("proposal output must be outside the read-only vault")
+        if args.writer == "deterministic" and (
+            args.llm_base_url or args.llm_model or args.allow_remote_llm
+        ):
+            raise ValidationError("LLM options require --writer llm")
         proposal = inspect_git_project(args.repo)
-        draft = (
-            render_curated_proposal(proposal)
-            if args.curated
-            else render_knowledge_proposal(proposal)
-        )
+        if args.writer == "llm":
+            base_url = args.llm_base_url or os.environ.get("OPENCAREEROPS_LLM_BASE_URL", "")
+            model = args.llm_model or os.environ.get("OPENCAREEROPS_LLM_MODEL", "")
+            if not base_url:
+                raise ValidationError("supply --llm-base-url or OPENCAREEROPS_LLM_BASE_URL")
+            draft = generate_llm_proposal(
+                proposal,
+                base_url=base_url,
+                model=model,
+                allow_remote=args.allow_remote_llm,
+                api_key=os.environ.get("OPENCAREEROPS_LLM_API_KEY"),
+            )
+        else:
+            draft = (
+                render_curated_proposal(proposal)
+                if args.curated
+                else render_knowledge_proposal(proposal)
+            )
         if args.output is None:
             print(draft)
         else:
